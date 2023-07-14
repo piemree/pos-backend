@@ -12,11 +12,6 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    UserModule,
-    CustomerModule,
-    ProductModule,
-    TransactionModule,
-    TransactionProductModule,
     ConfigModule.forRoot({
       envFilePath: ['.env.development'],
     }),
@@ -30,6 +25,11 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
       database: process.env.DB_NAME || 'salepoint',
     }),
+    UserModule,
+    CustomerModule,
+    ProductModule,
+    TransactionModule,
+    TransactionProductModule,
     AuthModule,
   ],
   controllers: [AppController],
