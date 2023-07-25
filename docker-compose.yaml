@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  db:
+    image: mysql
+    ports:
+      - ${DB_PORT}:3306
+    restart: always
+    environment:
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - 'db_data:/var/lib/mysql'
+
+  # for php myadmin goto http://localhost:8080
+  db_admin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    restart: 'on-failure'
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: ${DB_PORT}
+      PMA_USER: ${DB_USERNAME}
+      PMA_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  db_data:
