@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerModule } from './customer/customer.module';
 import { ProductModule } from './product/product.module';
 import { TransactionModule } from './transaction/transaction.module';
-import { TransactionProductModule } from './transaction-product/transaction-product.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 
@@ -27,7 +26,6 @@ import { AuthModule } from './auth/auth.module';
     CustomerModule,
     ProductModule,
     TransactionModule,
-    TransactionProductModule,
     AuthModule,
   ],
   controllers: [AppController],

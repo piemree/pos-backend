@@ -1,7 +1,14 @@
 import { Customers } from 'src/customer/entities/customer.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Transaction } from 'src/transaction/entities/transaction.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
@@ -16,6 +23,9 @@ export class User {
 
   @Column({ nullable: true })
   companyName!: string;
+
+  @Column({ unique: true })
+  username!: string;
 
   @Column({ unique: true })
   email!: string;
@@ -43,7 +53,7 @@ export class User {
 
   //role admin or user enum
   @Column({ type: 'enum', enum: ['admin', 'user'], default: 'user' })
-  role!: string;
+  role!: 'admin' | 'user';
 
   @Column({
     type: 'timestamp',
@@ -66,4 +76,10 @@ export class User {
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions!: Transaction[];
+
+  // hash password before insert
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }

@@ -1,4 +1,4 @@
-import { TransactionProduct } from 'src/transaction-product/entities/transaction-product.entity';
+import { TransactionProduct } from 'src/transaction/entities/transaction-product.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,

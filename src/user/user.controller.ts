@@ -10,6 +10,8 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Request } from '@nestjs/common';
+import { Roles } from 'src/decorators/roles';
 
 @Controller('user')
 export class UserController {
@@ -20,8 +22,11 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Roles('user')
   @Get()
-  findAll() {
+  findAll(@Request() req: any) {
+    console.log(req.user);
+
     return this.userService.findAll();
   }
 
