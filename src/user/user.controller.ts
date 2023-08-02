@@ -12,24 +12,26 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles';
+import { Public } from 'src/decorators/public';
+import { Role } from './enums/role.enum';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Roles('user')
+  @Roles(Role.Admin)
   @Get()
   findAll(@Request() req: any) {
-    console.log(req.user);
-
     return this.userService.findAll();
   }
 
+  @Roles(Role.Admin)
   @Get(':id')
   findOne(@Param('username') username: string) {
     return this.userService.findOne(username);

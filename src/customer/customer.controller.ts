@@ -1,20 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+} from '@nestjs/common';
 import { CustomerService } from './customer.service';
-import { CreateCustomerDto } from './dto/create-customer.dto';
+import { CreateCustomerBody } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { UserService } from 'src/user/user.service';
+import { Roles } from 'src/decorators/roles';
+import { Role } from 'src/user/enums/role.enum';
 
 @Controller('customer')
 export class CustomerController {
-  constructor(private readonly customerService: CustomerService) {}
+  constructor(
+    private readonly customerService: CustomerService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
-  create(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.customerService.create(createCustomerDto);
+  async create(
+    @Request() req: any,
+    @Body() createCustomerDto: CreateCustomerBody,
+  ) {
+    const createUserData = { ...createCustomerDto, user: req.user?.id };
+    return await this.customerService.create(createUserData);
   }
 
+  @Roles(Role.Admin)
   @Get()
   findAll() {
     return this.customerService.findAll();
+  }
+
+  @Get('getMyCustomers')
+  async getMyCustomers(@Request() req: any) {
+    const user = await this.userService.findOne(req.user?.username);
+    return await this.customerService.findAllByUserId(user.id);
   }
 
   @Get(':id')
@@ -23,7 +49,10 @@ export class CustomerController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCustomerDto: UpdateCustomerDto,
+  ) {
     return this.customerService.update(+id, updateCustomerDto);
   }
 

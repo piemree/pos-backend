@@ -17,19 +17,49 @@ export class Customers {
   @Column()
   name!: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   surname!: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyName!: string;
+
+  @Column({
+    nullable: true,
+  })
+  email!: string;
+
+  @Column({
+    nullable: true,
+  })
+  address!: string;
+
+  @Column({
+    nullable: true,
+  })
+  iban!: string;
+
+  @Column({
+    nullable: true,
+  })
+  tel!: string;
 
   @Column({ default: () => 0 })
   balance!: number;
 
-  @Column()
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt!: Date;
 
-  @Column()
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+  })
   updatedAt!: Date;
 
   @ManyToOne(() => User, (users) => users.customers)
